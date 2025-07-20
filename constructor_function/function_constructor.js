@@ -7,9 +7,14 @@ function Person(name, age)
 }
 
 let P = new Person("ABC", 23)
-console.log(P)  //gets the empty object with the name Person
+console.log(P)  //gets the empty Person object
+// Here we're creating a new person without any "this" context
 
 let P1=Person("Yash", 21)
+console.log(P1)
+
+let Pp=Person("XYZ", 22)
+console.log(Pp)
 console.log(P1)
 
 function thisPersons(name, age)/* here you will three dots below the function name as this function may be converted to "class" */
@@ -27,7 +32,7 @@ let P3 = new thisPersons("Ayush Rawat", 15)
 console.log(P3) //creates the new instance of "thisPersons" by the name of P3, and shows the object with all the properties and values of "thisPerson", given under the arguments
 
 let P4 = thisPersons("John Doe", 43)
-console.log(P4) //prints the statement we are returning 
+console.log(P4) //prints the statement we are returning as this is executing the function instead of creating a new instance of that function using "new"
 
 
 let P5 = thisPersons("John Wick", 45)
@@ -41,7 +46,7 @@ function Teas(type)
 
     this.desc=function(){
         return `Hi! This is ${this.type} tea`;
-    }   //"desc" is neither a parameter nor a pre-decalared variable rather it's a variable we craeted using "this" keyword and we can craete such more variables on our own just by using "this" keyword
+    }   //"desc" is neither a parameter nor a pre-decalared variable rather it's a variable we created using "this" keyword and we can craete such more variables on our own just by using "this" keyword
 }
 
 let lemonTea = new Teas("Lemon");
@@ -54,13 +59,38 @@ function Animal(species)
 }
 
 // Adding a method to the shared prototype
-Animal.prototype.sound = function(){
+Animal.prototype.sound = function(sound){
+    if(sound){
+        return `${this.species} makes a sound of ${sound}`
+    }
     return `${this.species} makes a sound`;
 }
-// ObjName.prototype is defines the properties and methods to be shared across all instances created by that constructor:- objName
+// ObjName.prototype defines the properties and methods to be shared across all instances created by that constructor:- objName
+
 // best for defining shared properties and methods while using function or class
 
 let dog = new Animal("Dog");
-console.log(dog.sound())
+console.log(dog.sound("Bark"))
 let cat = new Animal("Cat");
-console.log(cat.sound())
+console.log(cat.sound("meow"))
+let cattle = new Animal("Cattle");
+console.log(cattle.sound())
+
+function World() {
+    this.galaxy = "Milky Way";
+}
+
+function Asia(name) {
+    World.call(this); // Inherit World properties
+    this.name = name;
+    console.log(this.galaxy)
+}
+
+// Inherit prototype methods (if any)
+Asia.prototype = Object.create(World.prototype);
+Asia.prototype.constructor = Asia;
+
+// Example
+const india = new Asia("India");  //Milky Way : as we are printing it inside the function
+console.log(india.name);        // India
+console.log(india.galaxy);   // Milky Way
